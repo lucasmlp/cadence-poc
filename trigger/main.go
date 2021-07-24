@@ -1,14 +1,17 @@
 package main
 
 import (
+	"context"
 	"errors"
+	"fmt"
+	"time"
 
 	"github.com/lucasmachadolopes/cadencePoc/workflows"
+	"github.com/pborman/uuid"
 	"go.uber.org/cadence/.gen/go/cadence/workflowserviceclient"
-	"go.uber.org/cadence/worker"
+	"go.uber.org/cadence/client"
 	"go.uber.org/yarpc"
 	"go.uber.org/yarpc/transport/tchannel"
-	"go.uber.org/zap"
 )
 
 const (
@@ -39,27 +42,27 @@ func NewWorkflowClient() (workflowserviceclient.Interface, error) {
 	return workflowserviceclient.New(dispatcher.ClientConfig(serviceNameCadenceFrontend)), nil
 }
 
-func main() {
+func NewCadenceClient(workflowClient workflowserviceclient.Interface) client.Client {
+	return client.NewClient(workflowClient, "cadence-poc", &client.Options{})
+}
 
+func main() {
 	wfClient, err := NewWorkflowClient()
 	if err != nil {
 		panic(err)
 	}
 
-	logger, err := zap.NewDevelopment()
-	if err != nil {
-		panic(err)
-	}
-
-	w := worker.New(wfClient, "cadence-poc", "pocTasklist", worker.Options{
-		Logger: logger,
-	})
-
-	w.RegisterWorkflow(workflows.HelloWorldWorkflow)
-
-	err = w.Run()
+	triggerClient := NewCadenceClient(wfClient)
+	workflowID := uuid.New()
+	_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
+		ID:                           workflowID,
+		TaskList:                     "pocTasklist",
+		ExecutionStartToCloseTimeout: 3 * time.Second,
+	}, workflows.HelloWorldWorkflow)
 
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Println("Started workflow:", workflowID)
 }
