@@ -48,12 +48,15 @@ func NewCadenceClient(workflowClient workflowserviceclient.Interface) client.Cli
 
 func main() {
 	wfClient, err := NewWorkflowClient()
+
 	if err != nil {
 		panic(err)
 	}
 
 	triggerClient := NewCadenceClient(wfClient)
+
 	workflowID := uuid.New()
+
 	_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
 		ID:                           workflowID,
 		TaskList:                     "pocTasklist",
