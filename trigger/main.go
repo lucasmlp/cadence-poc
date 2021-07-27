@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/lucasmachadolopes/cadencePoc/workflows"
@@ -47,6 +48,9 @@ func NewCadenceClient(workflowClient workflowserviceclient.Interface) client.Cli
 }
 
 func main() {
+
+	workflowName := os.Args[1]
+
 	wfClient, err := NewWorkflowClient()
 
 	if err != nil {
@@ -57,15 +61,25 @@ func main() {
 
 	workflowID := uuid.New()
 
-	_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
-		ID:                           workflowID,
-		TaskList:                     "pocTasklist",
-		ExecutionStartToCloseTimeout: 3 * time.Second,
-	}, workflows.HelloWorldWorkflow)
+	switch name := workflowName; name {
+	case "HelloWorld":
+		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
+			ID:                           workflowID,
+			TaskList:                     "pocTasklist",
+			ExecutionStartToCloseTimeout: 3 * time.Second,
+		}, workflows.HelloWorldWorkflow)
+	case "SimpleWorkflow":
+		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
+			ID:                           workflowID,
+			TaskList:                     "pocTasklist",
+			ExecutionStartToCloseTimeout: 10 * time.Second,
+		}, workflows.SimpleWorkflow)
+	}
 
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println("Started workflow:", workflowID)
+	fmt.Println("Workflow:", workflowName)
 }

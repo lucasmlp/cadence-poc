@@ -11,6 +11,7 @@ import (
 const (
 	serviceNameCadenceClient   = "cadence-client"
 	serviceNameCadenceFrontend = "cadence-frontend"
+	domainName                 = "poc"
 )
 
 func main() {
@@ -25,12 +26,13 @@ func main() {
 		panic(err)
 	}
 
-	w := worker.New(workflowClient, "cadence-poc", "pocTasklist",
+	w := worker.New(workflowClient, domainName, "pocTasklist",
 		worker.Options{
 			Logger: logger,
 		})
 
 	w.RegisterWorkflow(workflows.HelloWorldWorkflow)
+	w.RegisterWorkflow(workflows.SimpleWorkflow)
 
 	err = w.Run()
 

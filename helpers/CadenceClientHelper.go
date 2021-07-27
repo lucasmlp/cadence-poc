@@ -5,6 +5,10 @@ import (
 	"go.uber.org/cadence/client"
 )
 
+const (
+	domainName = "poc"
+)
+
 func NewCadenceClient(workflowClient workflowserviceclient.Interface) client.Client {
-	return client.NewClient(workflowClient, "cadence-poc", &client.Options{})
+	return client.NewClient(workflowClient, domainName, &client.Options{})
 }
