@@ -33,6 +33,7 @@ func main() {
 
 	w.RegisterWorkflow(workflows.HelloWorldWorkflow)
 	w.RegisterWorkflow(workflows.SimpleWorkflow)
+	w.RegisterWorkflow(workflows.WaitingSignalWorkflow)
 
 	err = w.Run()
 

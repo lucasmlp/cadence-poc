@@ -44,7 +44,7 @@ func NewWorkflowClient() (workflowserviceclient.Interface, error) {
 }
 
 func NewCadenceClient(workflowClient workflowserviceclient.Interface) client.Client {
-	return client.NewClient(workflowClient, "cadence-poc", &client.Options{})
+	return client.NewClient(workflowClient, "poc", &client.Options{})
 }
 
 func main() {
@@ -68,18 +68,29 @@ func main() {
 			TaskList:                     "pocTasklist",
 			ExecutionStartToCloseTimeout: 3 * time.Second,
 		}, workflows.HelloWorldWorkflow)
+
 	case "SimpleWorkflow":
 		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
 			ID:                           workflowID,
 			TaskList:                     "pocTasklist",
 			ExecutionStartToCloseTimeout: 10 * time.Second,
 		}, workflows.SimpleWorkflow)
+
+	case "WaitingSignalWorkflow":
+		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
+			ID:                           workflowID,
+			TaskList:                     "pocTasklist",
+			ExecutionStartToCloseTimeout: 1 * time.Minute,
+		}, workflows.WaitingSignalWorkflow, "signalTeste")
+
+	case "SendSignalWorkflow":
+		err = triggerClient.SignalWorkflow(context.Background(), os.Args[2], "", "signalTeste", "SOME_VALUE")
 	}
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("Started workflow:", workflowID)
-	fmt.Println("Workflow:", workflowName)
+	fmt.Println("Started workflow: ", workflowID)
+	fmt.Println("Workflow: ", workflowName)
 }
