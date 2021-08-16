@@ -80,7 +80,7 @@ func main() {
 		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
 			ID:                           workflowID,
 			TaskList:                     "pocTasklist",
-			ExecutionStartToCloseTimeout: 1 * time.Minute,
+			ExecutionStartToCloseTimeout: 30 * time.Second,
 		}, workflows.WaitingSignalWorkflow, "signalTeste")
 
 	case "SendSignalWorkflow":

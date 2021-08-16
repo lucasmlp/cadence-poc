@@ -1,7 +1,6 @@
 package workflows
 
 import (
-	"errors"
 	"fmt"
 	"time"
 
@@ -36,12 +35,14 @@ func WaitingSignalWorkflow(ctx workflow.Context, signalName string) error {
 		c.Receive(ctx, &signalVal)
 		workflow.GetLogger(ctx).Info("Received signal!", zap.String("signal", signalName), zap.String("value", signalVal))
 	})
-	s.Select(ctx)
 
-	if len(signalVal) > 0 && signalVal != "SOME_VALUE" {
-		return errors.New("signalVal")
-	}
+	workflow.Go(ctx, func(ctx workflow.Context) {
+		fmt.Println("Go Routine")
+		s.Select(ctx)
+		fmt.Println("Ended Go Routine")
+	})
 
+	workflow.Sleep(ctx, time.Second*20)
 	fmt.Println("Ended workflow: WaitingSignalWorkflow")
 	fmt.Println("------------------------------------------------------------------")
 	return nil
