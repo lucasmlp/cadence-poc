@@ -5,7 +5,12 @@ import (
 	"time"
 
 	"go.uber.org/cadence/workflow"
-	"go.uber.org/zap"
+)
+
+const (
+	serviceNameCadenceClient   = "cadence-client"
+	serviceNameCadenceFrontend = "cadence-frontend"
+	domainName                 = "poc"
 )
 
 func HelloWorldWorkflow(ctx workflow.Context) error {
@@ -30,19 +35,20 @@ func WaitingSignalWorkflow(ctx workflow.Context, signalName string) error {
 	var signalVal string
 	signalChan := workflow.GetSignalChannel(ctx, signalName)
 
-	s := workflow.NewSelector(ctx)
-	s.AddReceive(signalChan, func(c workflow.Channel, more bool) {
-		c.Receive(ctx, &signalVal)
-		workflow.GetLogger(ctx).Info("Received signal!", zap.String("signal", signalName), zap.String("value", signalVal))
-	})
-
 	workflow.Go(ctx, func(ctx workflow.Context) {
-		fmt.Println("Go Routine")
+		fmt.Println("------------------------------------------------------------------")
+		fmt.Println("Started Go Routine")
+		s := workflow.NewSelector(ctx)
+		s.AddReceive(signalChan, func(c workflow.Channel, more bool) {
+			c.Receive(ctx, &signalVal)
+			fmt.Println("Received signal: ", signalVal)
+		})
 		s.Select(ctx)
 		fmt.Println("Ended Go Routine")
+		fmt.Println("------------------------------------------------------------------")
 	})
 
-	workflow.Sleep(ctx, time.Second*20)
+	workflow.Sleep(ctx, time.Second*30)
 	fmt.Println("Ended workflow: WaitingSignalWorkflow")
 	fmt.Println("------------------------------------------------------------------")
 	return nil
