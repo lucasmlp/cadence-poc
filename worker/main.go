@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/lucasmachadolopes/cadencePoc/activities"
 	"github.com/lucasmachadolopes/cadencePoc/helpers"
 	"github.com/lucasmachadolopes/cadencePoc/workflows"
 
@@ -34,6 +35,7 @@ func main() {
 	w.RegisterWorkflow(workflows.HelloWorldWorkflow)
 	w.RegisterWorkflow(workflows.SimpleWorkflow)
 	w.RegisterWorkflow(workflows.WaitingSignalWorkflow)
+	w.RegisterActivity(activities.PrintCurrentTime)
 
 	err = w.Run()
 

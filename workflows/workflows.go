@@ -4,13 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"go.uber.org/cadence/workflow"
-)
+	"github.com/lucasmachadolopes/cadencePoc/activities"
 
-const (
-	serviceNameCadenceClient   = "cadence-client"
-	serviceNameCadenceFrontend = "cadence-frontend"
-	domainName                 = "poc"
+	"go.uber.org/cadence/workflow"
 )
 
 func HelloWorldWorkflow(ctx workflow.Context) error {
@@ -21,7 +17,16 @@ func HelloWorldWorkflow(ctx workflow.Context) error {
 
 func SimpleWorkflow(ctx workflow.Context) error {
 
+	ao := workflow.ActivityOptions{
+		StartToCloseTimeout:    time.Second * 30,
+		ScheduleToStartTimeout: time.Second * 120,
+	}
+
+	ctx = workflow.WithActivityOptions(ctx, ao)
+
 	fmt.Println("Started workflow: SimpleWorkflow")
+	workflow.Sleep(ctx, time.Second*5)
+	workflow.ExecuteActivity(ctx, activities.PrintCurrentTime, "")
 	workflow.Sleep(ctx, time.Second*5)
 	fmt.Println("Ended workflow: SimpleWorkflow")
 	fmt.Println("------------------------------------------------------------------")
