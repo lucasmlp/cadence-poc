@@ -40,14 +40,14 @@ func main() {
 			ExecutionStartToCloseTimeout: 1 * time.Second,
 		}, workflows.HelloWorldWorkflow)
 
-	case "SimpleWorkflow":
+	case "StartSimpleWorkflow":
 		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
 			ID:                           workflowID,
 			TaskList:                     "pocTasklist",
 			ExecutionStartToCloseTimeout: 45 * time.Second,
 		}, workflows.SimpleWorkflow)
 
-	case "WaitingSignalWorkflow":
+	case "StartWaitingSignalWorkflow":
 		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
 			ID:                           workflowID,
 			TaskList:                     "pocTasklist",

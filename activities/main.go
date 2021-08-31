@@ -6,18 +6,29 @@ import (
 	"time"
 )
 
-func PrintCurrentTime(ctx context.Context) (string, string, error) {
-	dayMonthYearLayout := "02-01-2006"
+func PrintCurrentTime(ctx context.Context) error {
+	//dayMonthYearLayout := "02-01-2006"
 
-	utcTime := fmt.Sprintf("UTC time: %v\n", time.Now().Format(dayMonthYearLayout))
-
-	loc, err := time.LoadLocation("America/Sao_Paulo")
+	loc, err := time.LoadLocation("Asia/Tokyo")
 
 	if err != nil {
-		return "", "", err
+		fmt.Printf("err: %v\n", err)
+		return err
 	}
 
-	correctedTime := fmt.Sprintf("UTC-3 time: %v\n", time.Now().In(loc).Format(dayMonthYearLayout))
+	tokyoTime := time.Now().In(loc) //.Format(dayMonthYearLayout)
 
-	return utcTime, correctedTime, nil
+	fmt.Printf("tokyoTime: %v\n", tokyoTime)
+
+	loc, err = time.LoadLocation("America/Sao_Paulo")
+
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		return err
+	}
+
+	saoPauloTime := time.Now().In(loc) //.Format(dayMonthYearLayout)
+	fmt.Printf("saoPauloTime: %v\n", saoPauloTime)
+
+	return nil
 }
