@@ -43,12 +43,8 @@ func main() {
 			ExecutionStartToCloseTimeout: 45 * time.Second,
 		}, workflows.ActivityWorkflow)
 
-	case "WaitingSignal":
-		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
-			ID:                           workflowID,
-			TaskList:                     "pocTasklist",
-			ExecutionStartToCloseTimeout: 30 * time.Second,
-		}, workflows.WaitingSignalWorkflow, "signalTeste")
+	case "StartWaitingSignalWorkflow":
+		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{}, workflows.WaitingSignalWorkflow, "signalTeste")
 
 	case "Version":
 		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{

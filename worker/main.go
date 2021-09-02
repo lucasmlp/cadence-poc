@@ -8,7 +8,9 @@ import (
 	"github.com/lucasmachadolopes/cadencePoc/helpers"
 	"github.com/lucasmachadolopes/cadencePoc/workflows"
 
+	"go.uber.org/cadence/activity"
 	"go.uber.org/cadence/worker"
+	"go.uber.org/cadence/workflow"
 	"go.uber.org/zap"
 )
 
