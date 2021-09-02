@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/lucasmachadolopes/cadencePoc/activities"
 	"github.com/lucasmachadolopes/cadencePoc/helpers"
 	"github.com/lucasmachadolopes/cadencePoc/workflows"
@@ -9,13 +12,12 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	serviceNameCadenceClient   = "cadence-client"
-	serviceNameCadenceFrontend = "cadence-frontend"
-	domainName                 = "poc"
-)
-
 func main() {
+	serviceNameCadenceClient := os.Getenv("CADENCE_CLIENT_NAME")
+	serviceNameCadenceFrontend := os.Getenv("CADENCE_FRONTEND_NAME")
+	domainName := os.Getenv("CADENCE_DOMAIN_NAME")
+
+	fmt.Printf("serviceNameCadenceClient: %v\n", serviceNameCadenceClient)
 
 	workflowClient, err := helpers.NewWorkflowClient(serviceNameCadenceClient, serviceNameCadenceFrontend)
 	if err != nil {
@@ -33,8 +35,9 @@ func main() {
 		})
 
 	w.RegisterWorkflow(workflows.HelloWorldWorkflow)
-	w.RegisterWorkflow(workflows.SimpleWorkflow)
+	w.RegisterWorkflow(workflows.ActivityWorkflow)
 	w.RegisterWorkflow(workflows.WaitingSignalWorkflow)
+	w.RegisterWorkflow(workflows.VersionWorkflow)
 	w.RegisterActivity(activities.PrintCurrentTime)
 
 	err = w.Run()

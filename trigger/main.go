@@ -12,13 +12,9 @@ import (
 	"go.uber.org/cadence/client"
 )
 
-const (
-	serviceNameCadenceClient   = "cadence-client"
-	serviceNameCadenceFrontend = "cadence-frontend"
-	domainName                 = "poc"
-)
-
 func main() {
+	serviceNameCadenceClient := os.Getenv("CADENCE_CLIENT_NAME")
+	serviceNameCadenceFrontend := os.Getenv("CADENCE_FRONTEND_NAME")
 
 	action := os.Args[1]
 
@@ -33,28 +29,35 @@ func main() {
 	workflowID := uuid.New()
 
 	switch name := action; name {
-	case "StartHelloWorldWorkflow":
+	case "HelloWorld":
 		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
 			ID:                           workflowID,
 			TaskList:                     "pocTasklist",
 			ExecutionStartToCloseTimeout: 1 * time.Second,
 		}, workflows.HelloWorldWorkflow)
 
-	case "SimpleWorkflow":
+	case "Activity":
 		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
 			ID:                           workflowID,
 			TaskList:                     "pocTasklist",
 			ExecutionStartToCloseTimeout: 45 * time.Second,
-		}, workflows.SimpleWorkflow)
+		}, workflows.ActivityWorkflow)
 
-	case "WaitingSignalWorkflow":
+	case "WaitingSignal":
 		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
 			ID:                           workflowID,
 			TaskList:                     "pocTasklist",
 			ExecutionStartToCloseTimeout: 30 * time.Second,
 		}, workflows.WaitingSignalWorkflow, "signalTeste")
 
-	case "SendCancelSignalWorkflow":
+	case "Version":
+		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
+			ID:                           workflowID,
+			TaskList:                     "pocTasklist",
+			ExecutionStartToCloseTimeout: 6 * time.Minute,
+		}, workflows.VersionWorkflow)
+
+	case "SendCancelSignal":
 		err = triggerClient.SignalWorkflow(context.Background(), os.Args[2], "", "signalTeste", "cancel")
 	}
 

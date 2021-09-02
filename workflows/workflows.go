@@ -15,25 +15,6 @@ func HelloWorldWorkflow(ctx workflow.Context) error {
 	return nil
 }
 
-func SimpleWorkflow(ctx workflow.Context) error {
-
-	ao := workflow.ActivityOptions{
-		StartToCloseTimeout:    time.Second * 30,
-		ScheduleToStartTimeout: time.Second * 120,
-	}
-
-	ctx = workflow.WithActivityOptions(ctx, ao)
-
-	fmt.Println("Started workflow: SimpleWorkflow")
-	workflow.Sleep(ctx, time.Second*5)
-	workflow.ExecuteActivity(ctx, activities.PrintCurrentTime, "")
-	workflow.Sleep(ctx, time.Second*5)
-	fmt.Println("Ended workflow: SimpleWorkflow")
-	fmt.Println("------------------------------------------------------------------")
-
-	return nil
-}
-
 func WaitingSignalWorkflow(ctx workflow.Context, signalName string) error {
 	fmt.Println("Started workflow: WaitingSignalWorkflow")
 
@@ -55,6 +36,38 @@ func WaitingSignalWorkflow(ctx workflow.Context, signalName string) error {
 
 	workflow.Sleep(ctx, time.Second*30)
 	fmt.Println("Ended workflow: WaitingSignalWorkflow")
+	fmt.Println("------------------------------------------------------------------")
+	return nil
+}
+
+func ActivityWorkflow(ctx workflow.Context) error {
+
+	ao := workflow.ActivityOptions{
+		StartToCloseTimeout:    time.Second * 30,
+		ScheduleToStartTimeout: time.Second * 120,
+	}
+
+	ctx = workflow.WithActivityOptions(ctx, ao)
+
+	fmt.Println("Started workflow: ActivityWorkflow")
+
+	workflow.Sleep(ctx, time.Second*5)
+
+	workflow.ExecuteActivity(ctx, activities.PrintCurrentTime, "")
+
+	workflow.Sleep(ctx, time.Second*5)
+
+	fmt.Println("Ended workflow: ActivityWorkflow")
+	fmt.Println("------------------------------------------------------------------")
+
+	return nil
+}
+
+func VersionWorkflow(ctx workflow.Context) error {
+	fmt.Println("Started workflow: VersionWorkflow")
+	workflow.Sleep(ctx, time.Minute*3)
+	fmt.Println("New message")
+	fmt.Println("Ended workflow: VersionWorkflow")
 	fmt.Println("------------------------------------------------------------------")
 	return nil
 }
