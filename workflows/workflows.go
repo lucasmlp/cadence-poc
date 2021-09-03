@@ -7,7 +7,6 @@ import (
 	"github.com/lucasmachadolopes/cadencePoc/activities"
 
 	"go.uber.org/cadence/workflow"
-	"go.uber.org/zap"
 )
 
 func HelloWorldWorkflow(ctx workflow.Context) error {
@@ -19,7 +18,7 @@ func HelloWorldWorkflow(ctx workflow.Context) error {
 
 func WaitingSignalWorkflow(ctx workflow.Context, signalName string) error {
 	fmt.Println("Started workflow: WaitingSignalWorkflow")
-	internalContext, cancelfunc := workflow.WithCancel(externalContext)
+	internalContext, cancelfunc := workflow.WithCancel(ctx)
 
 	var signalVal string
 	signalChan := workflow.GetSignalChannel(internalContext, signalName)

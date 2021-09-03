@@ -7,17 +7,28 @@ import (
 )
 
 func PrintCurrentTime(ctx context.Context) error {
-	dayMonthYearLayout := "02-01-2006"
+	//dayMonthYearLayout := "02-01-2006"
 
-	utcTime := fmt.Sprintf("UTC time: %v\n", time.Now().Format(dayMonthYearLayout))
-	fmt.Printf("utcTime: %v\n", utcTime)
-	loc, err := time.LoadLocation("America/Sao_Paulo")
+	loc, err := time.LoadLocation("Asia/Tokyo")
 
 	if err != nil {
+		fmt.Printf("err: %v\n", err)
 		return err
 	}
 
-	correctedTime := fmt.Sprintf("UTC-3 time: %v\n", time.Now().In(loc).Format(dayMonthYearLayout))
-	fmt.Printf("correctedTime: %v\n", correctedTime)
+	tokyoTime := time.Now().In(loc) //.Format(dayMonthYearLayout)
+
+	fmt.Printf("tokyoTime: %v\n", tokyoTime)
+
+	loc, err = time.LoadLocation("America/Sao_Paulo")
+
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+		return err
+	}
+
+	saoPauloTime := time.Now().In(loc) //.Format(dayMonthYearLayout)
+	fmt.Printf("saoPauloTime: %v\n", saoPauloTime)
+
 	return nil
 }

@@ -43,7 +43,7 @@ func main() {
 			ExecutionStartToCloseTimeout: 45 * time.Second,
 		}, workflows.ActivityWorkflow)
 
-	case "StartWaitingSignalWorkflow":
+	case "WaitingSignal":
 		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{}, workflows.WaitingSignalWorkflow, "signalTeste")
 
 	case "Version":
@@ -53,7 +53,7 @@ func main() {
 			ExecutionStartToCloseTimeout: 6 * time.Minute,
 		}, workflows.VersionWorkflow)
 
-	case "SendCancelSignal":
+	case "CancelSignal":
 		err = triggerClient.SignalWorkflow(context.Background(), os.Args[2], "", "signalTeste", "cancel")
 	}
 

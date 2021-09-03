@@ -36,11 +36,19 @@ func main() {
 			Logger: logger,
 		})
 
-	w.RegisterWorkflow(workflows.HelloWorldWorkflow)
-	w.RegisterWorkflow(workflows.ActivityWorkflow)
-	w.RegisterWorkflow(workflows.WaitingSignalWorkflow)
-	w.RegisterWorkflow(workflows.VersionWorkflow)
-	w.RegisterActivity(activities.PrintCurrentTime)
+	workflow.RegisterWithOptions(workflows.HelloWorldWorkflow, workflow.RegisterOptions{
+		Name: "HelloWorldWorkflow",
+	})
+	workflow.RegisterWithOptions(workflows.WaitingSignalWorkflow, workflow.RegisterOptions{
+		Name: "WaitingSignalWorkflow",
+	})
+	workflow.RegisterWithOptions(workflows.ActivityWorkflow, workflow.RegisterOptions{
+		Name: "ActivityWorkflow",
+	})
+	workflow.RegisterWithOptions(workflows.VersionWorkflow, workflow.RegisterOptions{
+		Name: "VersionWorkflow",
+	})
+	activity.Register(activities.PrintCurrentTime)
 
 	err = w.Run()
 

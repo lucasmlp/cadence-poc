@@ -26,3 +26,15 @@ cadence-worker:
 	@ echo "Starting the Cadence Worker..."
 	@ echo
 	@ go run ./worker/main.go
+
+hello-world:
+	@ go run ./trigger/main.go HelloWorld
+
+activity:
+	@ go run ./trigger/main.go Activity
+
+waiting-signal:
+	@ go run ./trigger/main.go WaitingSignal
+
+version:
+	@ go run ./trigger/main.go Version
