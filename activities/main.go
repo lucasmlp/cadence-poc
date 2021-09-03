@@ -7,8 +7,6 @@ import (
 )
 
 func PrintCurrentTime(ctx context.Context) error {
-	//dayMonthYearLayout := "02-01-2006"
-
 	loc, err := time.LoadLocation("Asia/Tokyo")
 
 	if err != nil {
@@ -16,7 +14,7 @@ func PrintCurrentTime(ctx context.Context) error {
 		return err
 	}
 
-	tokyoTime := time.Now().In(loc) //.Format(dayMonthYearLayout)
+	tokyoTime := time.Now().In(loc)
 
 	fmt.Printf("tokyoTime: %v\n", tokyoTime)
 
@@ -27,8 +25,20 @@ func PrintCurrentTime(ctx context.Context) error {
 		return err
 	}
 
-	saoPauloTime := time.Now().In(loc) //.Format(dayMonthYearLayout)
+	saoPauloTime := time.Now().In(loc)
 	fmt.Printf("saoPauloTime: %v\n", saoPauloTime)
 
 	return nil
+}
+
+func ActivityA(data string) (string, error) {
+	return data + " antigo", nil
+}
+
+func ActivityB(data string) (string, error) {
+	return data + " + final", nil
+}
+
+func ActivityC(data string) (string, error) {
+	return data + " novo", nil
 }
