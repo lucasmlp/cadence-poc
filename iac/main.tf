@@ -1,20 +1,14 @@
 terraform {
-  required_providers {
-    google = {
-      source = "hashicorp/google"
-      version = "3.5.0"
-    }
+  backend "gcs" {
+    bucket = "iac-cadence"
+    # credentials = "./cadence-poc-b055cfd0672c.json"
   }
 }
 
-provider "google" {
-  credentials = file("cadence-poc-6714c6805157.json")
-
-  project = "cadence-poc"
-  region  = "us-east1"
-  zone    = "us-east1-b"
+provider "kubernetes" {
+  host = "http://127.0.0.1:9874"
 }
 
-module "cadence" {
+module "cassandra" {
   source = "./cadence"
 }

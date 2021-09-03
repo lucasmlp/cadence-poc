@@ -1,5 +1,5 @@
 server:
-  replicaCount: 4
+  replicaCount: 1
   metrics:
     annotations:
       enabled: true
@@ -48,7 +48,7 @@ web:
     effect: "NoSchedule"
 
 frontend:
-  replicaCount: 4
+  replicaCount: 1
   nodeSelector:
     cloud.google.com/gke-nodepool: cadence
 
@@ -59,7 +59,7 @@ frontend:
     effect: "NoSchedule"
 
 history:
-  replicaCount: 4
+  replicaCount: 1
   nodeSelector:
     cloud.google.com/gke-nodepool: cadence
 
@@ -70,7 +70,7 @@ history:
     effect: "NoSchedule"
 
 matching:
-  replicaCount: 4
+  replicaCount: 1
   nodeSelector:
     cloud.google.com/gke-nodepool: cadence
 
@@ -81,7 +81,7 @@ matching:
     effect: "NoSchedule"
 
 worker:
-  replicaCount: 4
+  replicaCount: 1
   nodeSelector:
     cloud.google.com/gke-nodepool: cadence
 
