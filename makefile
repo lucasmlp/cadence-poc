@@ -38,3 +38,6 @@ waiting-signal:
 
 version:
 	@ go run ./trigger/main.go Version
+
+version2:
+	@ go run ./trigger/main.go Version2

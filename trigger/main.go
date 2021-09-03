@@ -53,6 +53,13 @@ func main() {
 			ExecutionStartToCloseTimeout: 6 * time.Minute,
 		}, workflows.VersionWorkflow, workflowID)
 
+	case "Version2":
+		_, err = triggerClient.StartWorkflow(context.Background(), client.StartWorkflowOptions{
+			ID:                           workflowID,
+			TaskList:                     "pocTasklist",
+			ExecutionStartToCloseTimeout: 6 * time.Minute,
+		}, workflows.VersionWorkflow2, workflowID)
+
 	case "CancelSignal":
 		err = triggerClient.SignalWorkflow(context.Background(), os.Args[2], "", "signalTeste", "cancel")
 	}

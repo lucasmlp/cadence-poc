@@ -48,7 +48,13 @@ func main() {
 	workflow.RegisterWithOptions(workflows.VersionWorkflow, workflow.RegisterOptions{
 		Name: "VersionWorkflow",
 	})
+	workflow.RegisterWithOptions(workflows.VersionWorkflow2, workflow.RegisterOptions{
+		Name: "VersionWorkflow2",
+	})
 	activity.Register(activities.PrintCurrentTime)
+	activity.Register(activities.ActivityA)
+	activity.Register(activities.ActivityB)
+	activity.Register(activities.ActivityC)
 
 	err = w.Run()
 

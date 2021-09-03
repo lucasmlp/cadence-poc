@@ -68,10 +68,12 @@ func ActivityWorkflow(ctx workflow.Context) error {
 
 func VersionWorkflow(ctx workflow.Context, workflowId string) error {
 	fmt.Println("Started workflow: VersionWorkflow")
+
 	// workflow.Sleep(ctx, time.Minute*2)
 	// fmt.Println("New message")
 	// fmt.Println("Ended workflow: ", workflowId)
 	// fmt.Println("------------------------------------------------------------------")
+
 	v := workflow.GetVersion(ctx, "Step1", workflow.DefaultVersion, 1)
 	if v == workflow.DefaultVersion {
 		workflow.Sleep(ctx, time.Minute*2)
@@ -88,18 +90,37 @@ func VersionWorkflow(ctx workflow.Context, workflowId string) error {
 	return nil
 }
 
-func VersionWorkflow2(ctx workflow.Context, data string) (string, error) {
+func VersionWorkflow2(ctx workflow.Context, data string) error {
 	ao := workflow.ActivityOptions{
 		ScheduleToStartTimeout: time.Minute,
 		StartToCloseTimeout:    time.Minute,
 	}
 	ctx = workflow.WithActivityOptions(ctx, ao)
+	var err error
 	var result1 string
-	err := workflow.ExecuteActivity(ctx, activities.ActivityA, data).Get(ctx, &result1)
-	if err != nil {
-		return "", err
+
+	// workflow.Sleep(ctx, time.Minute*2)
+	// err = workflow.ExecuteActivity(ctx, activities.ActivityA, data).Get(ctx, &result1)
+
+	v := workflow.GetVersion(ctx, "Step1", workflow.DefaultVersion, 1)
+	if v == workflow.DefaultVersion {
+		workflow.Sleep(ctx, time.Minute*2)
+		err = workflow.ExecuteActivity(ctx, activities.ActivityA, data).Get(ctx, &result1)
+	} else {
+		workflow.Sleep(ctx, time.Minute*1)
+		err = workflow.ExecuteActivity(ctx, activities.ActivityC, data).Get(ctx, &result1)
 	}
+
+	if err != nil {
+		return err
+	}
+	fmt.Println(result1)
 	var result2 string
 	err = workflow.ExecuteActivity(ctx, activities.ActivityB, result1).Get(ctx, &result2)
-	return result2, err
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(result2)
+	return err
 }
