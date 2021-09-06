@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/lucasmachadolopes/cadencePoc/activities"
+	"github.com/machado-br/cadence-poc/activities"
 
 	"go.uber.org/cadence/workflow"
 )

@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
-    bucket = "iac-cadence"
-    # credentials = "./cadence-poc-b055cfd0672c.json"
+    bucket = "iac-cadence-playground"
+    credentials = "cadence-playground.json"
   }
 }
 

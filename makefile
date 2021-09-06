@@ -27,6 +27,12 @@ cadence-worker:
 	@ echo
 	@ go run ./worker/main.go
 
+cadence-replayer:
+	@ echo
+	@ echo "Starting the Cadence Replayer..."
+	@ echo
+	@ go run ./replay/main.go
+
 hello-world:
 	@ go run ./trigger/main.go HelloWorld
 
